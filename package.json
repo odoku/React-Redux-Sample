@@ -18,6 +18,7 @@
     "@types/react-redux": "^6.0.7",
     "@types/react-router-dom": "^4.3.0",
     "@webassemblyjs/helper-module-context": "^1.7.6",
+    "change-case": "^3.0.2",
     "css-loader": "^1.0.0",
     "dom-helpers": "^3.3.1",
     "formik": "^1.2.0",
