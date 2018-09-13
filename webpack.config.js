@@ -11,7 +11,7 @@ module.exports = {
     port: 3000,
   },
   devtool: "source-map",
-  entry: "./src/ts/Index.tsx",
+  entry: "./src/Index.tsx",
   mode: "development",
   module: {
     rules: [
