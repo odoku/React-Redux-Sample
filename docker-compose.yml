@@ -1,0 +1,14 @@
+---
+version: '3'
+
+
+services:
+  react-node:
+    image: node:8-alpine
+    container_name: react-node
+    working_dir: /app
+    command: sh ./bootstrap.sh
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
