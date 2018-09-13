@@ -1,4 +1,4 @@
-export interface IUser {
+export interface User {
   id: number
   country_id: number
   email: string

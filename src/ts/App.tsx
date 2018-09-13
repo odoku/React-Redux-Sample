@@ -1,26 +1,26 @@
 import * as React from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
 import Home from '~/components/pages/Home'
 import Login from '~/components/pages/Login'
 import LoginRequired from '~/components/utils/LoginRequired'
-import { IRootState } from '~/modules'
+import { RootState } from '~/modules'
 import { checkLoggedin } from '~/modules/auth'
 
-interface IProps {
+interface Props {
   isAuthenticated: boolean
   onWillMount: () => void
 }
 
-class App extends React.Component<IProps, {}> {
-  componentWillMount() {
+class App extends React.Component<Props, {}> {
+  public componentWillMount () {
     this.props.onWillMount()
   }
 
-  render() {
+  public render () {
     return (
       <BrowserRouter>
         <Switch>
@@ -38,14 +38,14 @@ class App extends React.Component<IProps, {}> {
 
 // Redux connect
 // ==================================================================
-type IStateProps = Pick<IProps, 'isAuthenticated'>
-const mapStateToProps: MapStateToProps<IStateProps, {}, IRootState> = ({ auth }, props) => {
+type IStateProps = Pick<Props, 'isAuthenticated'>
+const mapStateToProps: MapStateToProps<IStateProps, {}, RootState> = ({ auth }, props) => {
   return { isAuthenticated: auth.isAuthenticated }
 }
 
-type DispatchProps = Pick<IProps, 'onWillMount'>
+type DispatchProps = Pick<Props, 'onWillMount'>
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (
-  dispatch: ThunkDispatch<IRootState, void, AnyAction>
+  dispatch: ThunkDispatch<RootState, void, AnyAction>
 ) => {
   return {
     onWillMount: () => {

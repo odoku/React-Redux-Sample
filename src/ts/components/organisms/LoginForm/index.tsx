@@ -3,22 +3,22 @@ import TextField from '@material-ui/core/TextField'
 import { Field, FieldProps, Form, InjectedFormikProps, withFormik } from 'formik'
 import * as React from 'react'
 
-export interface IValues {
+export interface Values {
   username: string
   password: string
 }
 
-interface IProps {
-  onSubmit: (values: IValues) => void
+interface Props {
+  onSubmit: (values: Values) => void
 }
 
-const BaseLoginForm: React.SFC<InjectedFormikProps<IProps, IValues>> = (props) => (
+const BaseLoginForm: React.SFC<InjectedFormikProps<Props, Values>> = (props) => (
   <Form>
     <Field
       type='text'
       label='Username'
       name='username'
-      render={({ field }: FieldProps<IValues>) => (
+      render={({ field }: FieldProps<Values>) => (
         <TextField type='text' label='Username' {...field} />
       )}
     />
@@ -26,7 +26,7 @@ const BaseLoginForm: React.SFC<InjectedFormikProps<IProps, IValues>> = (props) =
       type='password'
       label='Password'
       name='password'
-      render={({ field }: FieldProps<IValues>) => (
+      render={({ field }: FieldProps<Values>) => (
         <TextField type='password' label='Password' {...field} />
       )}
     />
@@ -34,11 +34,11 @@ const BaseLoginForm: React.SFC<InjectedFormikProps<IProps, IValues>> = (props) =
   </Form>
 )
 
-const LoginForm = withFormik<IProps, IValues>({
+const LoginForm = withFormik<Props, Values>({
   handleSubmit: (values, { props }) => {
     return props.onSubmit(values)
   },
-  mapPropsToValues: (props: IProps): IValues => {
+  mapPropsToValues: (props: Props): Values => {
     return { password: '', username: '' }
   }
 })(BaseLoginForm)

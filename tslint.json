@@ -9,10 +9,12 @@
     "jsx-no-multiline-js": false,
     "jsx-no-lambda": false,
     "object-literal-sort-keys": false,
+    "interface-name": false
   },
   "linterOptions": {
     "exclude": [
       "node_modules",
+      "public/assets/js/*",
       "**/*.d.ts"
     ]
   }

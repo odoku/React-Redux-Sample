@@ -5,8 +5,8 @@ import * as AuthModule from './auth'
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
-export interface IRootState {
-  auth: AuthModule.IAuthState,
+export interface RootState {
+  auth: AuthModule.AuthState,
 }
 
 const store = createStore(

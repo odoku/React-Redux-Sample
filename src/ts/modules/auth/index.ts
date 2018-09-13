@@ -3,18 +3,18 @@ import { reducerWithInitialState } from 'typescript-fsa-reducers'
 import { asyncFactory } from 'typescript-fsa-redux-thunk'
 
 import * as api from '~/api'
-import { IUser } from '~/models'
-import { IRootState } from '~/modules'
+import { User } from '~/models'
+import { RootState } from '~/modules'
 
 // State
 // ==================================================================
-export interface IAuthState {
+export interface AuthState {
   isAuthenticated: boolean
   accessToken: string,
-  user: IUser | null
+  user: User | null
 }
 
-const createInitialState = (): IAuthState => {
+const createInitialState = (): AuthState => {
   return {
     isAuthenticated: false,
     accessToken: '',
@@ -25,27 +25,27 @@ const createInitialState = (): IAuthState => {
 // Prepare
 // ==================================================================
 const actionCreator = actionCreatorFactory('auth')
-const createAsync = asyncFactory<IRootState>(actionCreator)
-export const reducer = reducerWithInitialState<IAuthState>(createInitialState())
+const createAsync = asyncFactory<RootState>(actionCreator)
+export const reducer = reducerWithInitialState<AuthState>(createInitialState())
 
 // Action - Login
 // ==================================================================
-interface ICredential {
+interface Credential {
   username: string
   password: string
 }
 
-interface IUserAndAccessToken {
+interface UserAndAccessToken {
   accessToken: string
-  user: IUser
+  user: User
 }
 
-export const login = createAsync<ICredential, IUserAndAccessToken>(
+export const login = createAsync<Credential, UserAndAccessToken>(
   'LOGIN',
   async ({ username, password }, dispatch, getState) => {
     // TODO: Error handling
     const response = await api.login({ username, password })
-    localStorage.setItem('access_token', response.jwt);
+    localStorage.setItem('access_token', response.jwt)
     return {
       accessToken: response.jwt,
       user: response.data
@@ -53,16 +53,16 @@ export const login = createAsync<ICredential, IUserAndAccessToken>(
   }
 )
 
-reducer.case(login.async.started, (state): IAuthState => {
+reducer.case(login.async.started, (state): AuthState => {
   console.debug('Start login...')
   return { ...state }
 })
 
-reducer.case(login.async.failed, (state, { error }): IAuthState => {
+reducer.case(login.async.failed, (state, { error }): AuthState => {
   return { ...state }
 })
 
-reducer.case(login.async.done, (state, { result: {accessToken, user} }): IAuthState => {
+reducer.case(login.async.done, (state, { result: { accessToken, user } }): AuthState => {
   console.debug('Logged in!!!', { ...state, accessToken, user })
   return {
     ...state,
@@ -74,7 +74,7 @@ reducer.case(login.async.done, (state, { result: {accessToken, user} }): IAuthSt
 
 // Action - Check Loggedin
 // ==================================================================
-export const checkLoggedin = createAsync<never, IUserAndAccessToken>(
+export const checkLoggedin = createAsync<never, UserAndAccessToken>(
   'CHECK_LOGIN',
   async (params, dispatch, getState) => {
     const { auth } = getState()
@@ -88,28 +88,28 @@ export const checkLoggedin = createAsync<never, IUserAndAccessToken>(
     // TODO: Error handling
     const accessToken = localStorage.getItem('access_token')
     if (!accessToken) {
-      throw 'Access token is not found.'
+      throw Error('Access token is not found.')
     }
 
     // TODO: Error handling
     const response = await api.getUser(accessToken)
     return {
-      accessToken: accessToken,
+      accessToken,
       user: response.data
     }
   }
 )
 
-reducer.case(checkLoggedin.async.started, (state): IAuthState => {
+reducer.case(checkLoggedin.async.started, (state): AuthState => {
   console.debug('Start check login...')
   return { ...state }
 })
 
-reducer.case(checkLoggedin.async.failed, (state, { error }): IAuthState => {
+reducer.case(checkLoggedin.async.failed, (state, { error }): AuthState => {
   return { ...state }
 })
 
-reducer.case(checkLoggedin.async.done, (state, { result: {accessToken, user} }): IAuthState => {
+reducer.case(checkLoggedin.async.done, (state, { result: { accessToken, user } }): AuthState => {
   console.debug('Logged in!!!', { ...state, accessToken, user })
   return {
     ...state,

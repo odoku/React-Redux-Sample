@@ -1,21 +1,21 @@
-import { IUser } from '~/models'
+import { User } from '~/models'
 
 // Login
 // ==================================================================
-interface ICredential {
+interface Credential {
   username: string
   password: string
 }
 
-interface ILoginResponse {
+interface LoginResponse {
   status: string
-  data: IUser
+  data: User
   jwt: string
   jwt_error: string
 }
 
 // XXX: Mock Function
-export const login = async ({ username, password }: ICredential): Promise<ILoginResponse> => {
+export const login = async ({ username, password }: Credential): Promise<LoginResponse> => {
   return {
     status: 'ok',
     data: {
@@ -29,7 +29,7 @@ export const login = async ({ username, password }: ICredential): Promise<ILogin
       zipcode: '1500011',
       address: '東京都渋谷区東1-1-1',
       is_admin: true,
-      is_verified: true,
+      is_verified: true
     },
     jwt: 'hogehogehogehoge',
     jwt_error: ''

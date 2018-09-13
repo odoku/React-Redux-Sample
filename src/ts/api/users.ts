@@ -1,14 +1,14 @@
-import { IUser } from '~/models'
+import { User } from '~/models'
 
 // Get User
 // ==================================================================
-interface IGetUserResponse {
+interface GetUserResponse {
   status: string
-  data: IUser
+  data: User
 }
 
 // XXX: Mock Function
-export const getUser = async (accessToken: string): Promise<IGetUserResponse> => {
+export const getUser = async (accessToken: string): Promise<GetUserResponse> => {
   return {
     status: 'ok',
     data: {
@@ -22,7 +22,7 @@ export const getUser = async (accessToken: string): Promise<IGetUserResponse> =>
       zipcode: '1500011',
       address: '東京都渋谷区東1-1-1',
       is_admin: true,
-      is_verified: true,
+      is_verified: true
     }
   }
 }

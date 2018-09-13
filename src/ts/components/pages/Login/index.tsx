@@ -4,20 +4,20 @@ import { Redirect } from 'react-router-dom'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import LoginForm, { IValues as ILoginFormValues } from '~/components/organisms/LoginForm'
-import { IRootState } from '~/modules'
+import LoginForm, { Values as LoginFormValues } from '~/components/organisms/LoginForm'
+import { RootState } from '~/modules'
 import { login } from '~/modules/auth'
 
 // Props
 // ==================================================================
-export interface IProps {
-  handleSubmit: (values: ILoginFormValues) => void
+export interface Props {
+  handleSubmit: (values: LoginFormValues) => void
   isAuthenticated: boolean
 }
 
 // Component
 // ==================================================================
-const Login: React.SFC<IProps> = ({ handleSubmit, isAuthenticated }) => (
+const Login: React.SFC<Props> = ({ handleSubmit, isAuthenticated }) => (
   <div>
     {isAuthenticated && <Redirect to='/' />}
     <h1>Login</h1>
@@ -27,14 +27,14 @@ const Login: React.SFC<IProps> = ({ handleSubmit, isAuthenticated }) => (
 
 // Redux connect
 // ==================================================================
-type IStateProps = Pick<IProps, 'isAuthenticated'>
-const mapStateToProps: MapStateToProps<IStateProps, {}, IRootState> = ({ auth }, props) => {
+type StateProps = Pick<Props, 'isAuthenticated'>
+const mapStateToProps: MapStateToProps<StateProps, {}, RootState> = ({ auth }, props) => {
   return { isAuthenticated: auth.isAuthenticated }
 }
 
-type DispatchProps = Pick<IProps, 'handleSubmit'>
+type DispatchProps = Pick<Props, 'handleSubmit'>
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (
-  dispatch: ThunkDispatch<IRootState, void, AnyAction>
+  dispatch: ThunkDispatch<RootState, void, AnyAction>
 ) => {
   return {
     handleSubmit: (values) => {
