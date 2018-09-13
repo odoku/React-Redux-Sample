@@ -4,9 +4,9 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import Home from '~/components/pages/Home'
-import Login from '~/components/pages/Login'
-import LoginRequired from '~/components/utils/LoginRequired'
+import { Home } from '~/components/pages/Home'
+import { Login } from '~/components/pages/Login'
+import { LoginRequired } from '~/components/utils/LoginRequired'
 import { RootState } from '~/modules'
 import { checkLoggedin } from '~/modules/auth'
 
@@ -15,7 +15,7 @@ interface Props {
   onWillMount: () => void
 }
 
-class App extends React.Component<Props, {}> {
+class BaseApp extends React.Component<Props, {}> {
   public componentWillMount () {
     this.props.onWillMount()
   }
@@ -39,19 +39,17 @@ class App extends React.Component<Props, {}> {
 // Redux connect
 // ==================================================================
 type IStateProps = Pick<Props, 'isAuthenticated'>
-const mapStateToProps: MapStateToProps<IStateProps, {}, RootState> = ({ auth }, props) => {
-  return { isAuthenticated: auth.isAuthenticated }
-}
+const mapStateToProps: MapStateToProps<IStateProps, {}, RootState> = ({ auth }, props) => ({
+  isAuthenticated: auth.isAuthenticated
+})
 
 type DispatchProps = Pick<Props, 'onWillMount'>
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (
   dispatch: ThunkDispatch<RootState, void, AnyAction>
-) => {
-  return {
-    onWillMount: () => {
-      return dispatch(checkLoggedin.action())
-    }
+) => ({
+  onWillMount: () => {
+    return dispatch(checkLoggedin.action())
   }
-}
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export const App = connect(mapStateToProps, mapDispatchToProps)(BaseApp)

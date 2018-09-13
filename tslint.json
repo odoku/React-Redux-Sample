@@ -9,7 +9,8 @@
     "jsx-no-multiline-js": false,
     "jsx-no-lambda": false,
     "object-literal-sort-keys": false,
-    "interface-name": [true, "never-prefix"]
+    "interface-name": [true, "never-prefix"],
+    "no-empty-interface": false
   },
   "linterOptions": {
     "exclude": [

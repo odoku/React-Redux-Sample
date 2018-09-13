@@ -3,15 +3,18 @@ import TextField from '@material-ui/core/TextField'
 import { Field, FieldProps, Form, InjectedFormikProps, withFormik } from 'formik'
 import * as React from 'react'
 
-export interface Values {
-  username: string
-  password: string
-}
+import { Credential } from '~/modules/auth'
 
+// Props & Values
+// ==================================================================
 interface Props {
-  onSubmit: (values: Values) => void
+  onSubmit: (values: Credential) => void
 }
 
+export interface Values extends Credential {}
+
+// Component
+// ==================================================================
 const BaseLoginForm: React.SFC<InjectedFormikProps<Props, Values>> = (props) => (
   <Form>
     <Field
@@ -34,13 +37,14 @@ const BaseLoginForm: React.SFC<InjectedFormikProps<Props, Values>> = (props) => 
   </Form>
 )
 
-const LoginForm = withFormik<Props, Values>({
+// Formik
+// ==================================================================
+export const LoginForm = withFormik<Props, Values>({
   handleSubmit: (values, { props }) => {
     return props.onSubmit(values)
   },
-  mapPropsToValues: (props: Props): Values => {
-    return { password: '', username: '' }
-  }
+  mapPropsToValues: (props: Props): Values => ({
+    username: '',
+    password: ''
+  })
 })(BaseLoginForm)
-
-export default LoginForm

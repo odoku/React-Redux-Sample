@@ -4,8 +4,8 @@ import * as ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 
 import '~/assets/sass/page.scss'
-import App from './App'
-import store from './modules'
+import { App } from './App'
+import { store } from './modules'
 
 const theme: Theme = createMuiTheme({})
 

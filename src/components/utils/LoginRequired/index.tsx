@@ -12,18 +12,16 @@ interface Props {
 
 // Component
 // ==================================================================
-const LoginRequired: React.SFC<Props> = ({ children, isAuthenticated }) => {
-  if (isAuthenticated) {
-    // XXX: 余計な <div /> を削除したい！
-    return <div>{children}</div>
-  }
-  return <Redirect to='/login' />
-}
+const BaseLoginRequired: React.SFC<Props> = ({ children, isAuthenticated }) => (
+  <div>
+    {isAuthenticated ? children : <Redirect to='/login' />}
+  </div>
+)
 
 // Redux connect
 // ==================================================================
-const mapStateToProps: MapStateToProps<Props, {}, RootState> = ({ auth }, props) => {
-  return { isAuthenticated: auth.isAuthenticated }
-}
+const mapStateToProps: MapStateToProps<Props, {}, RootState> = ({ auth }, props) => ({
+  isAuthenticated: auth.isAuthenticated
+})
 
-export default connect(mapStateToProps, () => ({}))(LoginRequired)
+export const LoginRequired = connect(mapStateToProps, () => ({}))(BaseLoginRequired)

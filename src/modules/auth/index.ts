@@ -14,13 +14,11 @@ export interface AuthState {
   user: User | null
 }
 
-const createInitialState = (): AuthState => {
-  return {
-    isAuthenticated: false,
-    accessToken: '',
-    user: null
-  }
-}
+const createInitialState = (): AuthState => ({
+  isAuthenticated: false,
+  accessToken: '',
+  user: null
+})
 
 // Prepare
 // ==================================================================
@@ -30,7 +28,7 @@ export const reducer = reducerWithInitialState<AuthState>(createInitialState())
 
 // Action - Login
 // ==================================================================
-interface Credential {
+export interface Credential {
   username: string
   password: string
 }
@@ -53,24 +51,16 @@ export const login = createAsync<Credential, UserAndAccessToken>(
   }
 )
 
-reducer.case(login.async.started, (state): AuthState => {
-  console.debug('Start login...')
-  return { ...state }
-})
+reducer.case(login.async.started, (state): AuthState => ({ ...state }))
 
-reducer.case(login.async.failed, (state, { error }): AuthState => {
-  return { ...state }
-})
+reducer.case(login.async.failed, (state, { error }): AuthState => ({ ...state }))
 
-reducer.case(login.async.done, (state, { result: { accessToken, user } }): AuthState => {
-  console.debug('Logged in!!!', { ...state, accessToken, user })
-  return {
-    ...state,
-    isAuthenticated: true,
-    accessToken,
-    user
-  }
-})
+reducer.case(login.async.done, (state, { result: { accessToken, user } }): AuthState => ({
+  ...state,
+  isAuthenticated: true,
+  accessToken,
+  user
+}))
 
 // Action - Check Loggedin
 // ==================================================================
@@ -100,24 +90,16 @@ export const checkLoggedin = createAsync<never, UserAndAccessToken>(
   }
 )
 
-reducer.case(checkLoggedin.async.started, (state): AuthState => {
-  console.debug('Start check login...')
-  return { ...state }
-})
+reducer.case(checkLoggedin.async.started, (state): AuthState => ({ ...state }))
 
-reducer.case(checkLoggedin.async.failed, (state, { error }): AuthState => {
-  return { ...state }
-})
+reducer.case(checkLoggedin.async.failed, (state, { error }): AuthState => ({ ...state }))
 
-reducer.case(checkLoggedin.async.done, (state, { result: { accessToken, user } }): AuthState => {
-  console.debug('Logged in!!!', { ...state, accessToken, user })
-  return {
-    ...state,
-    isAuthenticated: true,
-    accessToken,
-    user
-  }
-})
+reducer.case(checkLoggedin.async.done, (state, { result: { accessToken, user } }): AuthState => ({
+  ...state,
+  isAuthenticated: true,
+  accessToken,
+  user
+}))
 
 // Action - Logout
 // ==================================================================

@@ -9,11 +9,9 @@ export interface RootState {
   auth: AuthModule.AuthState,
 }
 
-const store = createStore(
+export const store = createStore(
   combineReducers({
     auth: AuthModule.reducer
   }),
   composeEnhancers(applyMiddleware(thunk))
 )
-
-export default store
