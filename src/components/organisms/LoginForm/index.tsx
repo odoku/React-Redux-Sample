@@ -2,6 +2,7 @@ import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import { Field, FieldProps, Form, InjectedFormikProps, withFormik } from 'formik'
 import * as React from 'react'
+import { compose, pure, setDisplayName } from 'recompose'
 
 import { Credential } from '~/modules/auth'
 
@@ -15,7 +16,7 @@ export interface Values extends Credential {}
 
 // Component
 // ==================================================================
-const BaseLoginForm: React.SFC<InjectedFormikProps<Props, Values>> = (props) => (
+const BaseComponent: React.SFC<InjectedFormikProps<Props, Values>> = (props) => (
   <Form>
     <Field
       type='text'
@@ -39,7 +40,7 @@ const BaseLoginForm: React.SFC<InjectedFormikProps<Props, Values>> = (props) => 
 
 // Formik
 // ==================================================================
-export const LoginForm = withFormik<Props, Values>({
+const FormikComponent = withFormik<Props, Values>({
   handleSubmit: (values, { props }) => {
     return props.onSubmit(values)
   },
@@ -47,4 +48,11 @@ export const LoginForm = withFormik<Props, Values>({
     username: '',
     password: ''
   })
-})(BaseLoginForm)
+})(BaseComponent)
+
+// Enhance
+// ==================================================================
+export default compose<Props, Props>(
+  setDisplayName('LoginForm'),
+  pure
+)(FormikComponent)

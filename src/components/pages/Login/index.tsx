@@ -1,33 +1,37 @@
 import * as React from 'react'
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { Redirect } from 'react-router-dom'
+import { compose, pure, setDisplayName } from 'recompose'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { LoginForm, Values as LoginFormValues } from '~/components/organisms/LoginForm'
+import LoginForm, { Values as LoginFormValues } from '~/components/organisms/LoginForm'
 import { RootState } from '~/modules'
 import { login } from '~/modules/auth'
 
 // Props
 // ==================================================================
-export interface Props {
-  handleSubmit: (values: LoginFormValues) => void
+interface Props {
   isAuthenticated: boolean
+  handleSubmit: (values: LoginFormValues) => void
 }
 
 // Component
 // ==================================================================
-class BaseLogin extends React.Component<Props, {}> {
-  public render () {
-    return (
-      <div>
-        {this.props.isAuthenticated && <Redirect to='/' />}
-        <h1>Login</h1>
-        <LoginForm onSubmit={this.props.handleSubmit} />
-      </div>
-    )
-  }
-}
+const BaseComponent: React.SFC<Props> = ({ isAuthenticated, handleSubmit }) => (
+  <div>
+    {isAuthenticated && <Redirect to='/' />}
+    <h1>Login</h1>
+    <LoginForm onSubmit={handleSubmit} />
+  </div>
+)
+
+// Enhance
+// ==================================================================
+const EnhancedComponent = compose<Props, Props>(
+  setDisplayName('Login'),
+  pure
+)(BaseComponent)
 
 // Redux connect
 // ==================================================================
@@ -48,4 +52,4 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (
   }
 })
 
-export const Login = connect(mapStateToProps, mapDispatchToProps)(BaseLogin)
+export default connect(mapStateToProps, mapDispatchToProps)(EnhancedComponent)

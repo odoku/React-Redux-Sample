@@ -1,40 +1,49 @@
 import * as React from 'react'
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { compose, lifecycle, pure, setDisplayName } from 'recompose'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { Home } from '~/components/pages/Home'
-import { Login } from '~/components/pages/Login'
-import { LoginRequired } from '~/components/utils/LoginRequired'
+import Home from '~/components/pages/Home'
+import Login from '~/components/pages/Login'
+import LoginRequired from '~/components/utils/LoginRequired'
 import { RootState } from '~/modules'
 import { checkLoggedin } from '~/modules/auth'
 
+// Props
+// ==================================================================
 interface Props {
   isAuthenticated: boolean
   onWillMount: () => void
 }
 
-class BaseApp extends React.Component<Props, {}> {
-  public componentWillMount () {
-    this.props.onWillMount()
-  }
-
-  public render () {
-    return (
-      <BrowserRouter>
+// Component
+// ==================================================================
+const BaseComponent: React.SFC<Props> = ({ isAuthenticated }) => (
+  <BrowserRouter>
+    <Switch>
+      <Route path='/login' component={Login} />
+      <LoginRequired>
         <Switch>
-          <Route path='/login' component={Login} />
-          <LoginRequired>
-            <Switch>
-              <Route path='/' component={Home} exact={true} />
-            </Switch>
-          </LoginRequired>
+          <Route path='/' component={Home} exact={true} />
         </Switch>
-      </BrowserRouter>
-    )
-  }
-}
+      </LoginRequired>
+    </Switch>
+  </BrowserRouter>
+)
+
+// Enhance
+// ==================================================================
+const EnhancedComponent = compose<Props, Props>(
+  setDisplayName('App'),
+  lifecycle<Props, {}>({
+    componentWillMount () {
+      this.props.onWillMount()
+    }
+  }),
+  pure
+)(BaseComponent)
 
 // Redux connect
 // ==================================================================
@@ -52,4 +61,4 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (
   }
 })
 
-export const App = connect(mapStateToProps, mapDispatchToProps)(BaseApp)
+export default connect(mapStateToProps, mapDispatchToProps)(EnhancedComponent)
